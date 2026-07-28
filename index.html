@@ -1535,13 +1535,13 @@ function renderHistoryChart(data){
   var chart = echarts.init(document.getElementById('historyChart'));
   chartInstances.history = chart;
   chart.setOption({
-    grid:{left:'3%',right:'4%',bottom:'18%',top:'10%',containLabel:true},
+    grid:{left:'3%',right:'4%',bottom:'22%',top:'10%',containLabel:true},
     tooltip:{trigger:'axis',formatter:function(p){
       var v = p[0].value;
       return p[0].name + '<br/>累计收益率：' + (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
     }},
     dataZoom:[{type:'inside',start:0,end:100},{type:'slider',start:0,end:100,height:20,bottom:5,handleSize:'100%',textStyle:{fontSize:9,color:'#4a6685'}}],
-    xAxis:{type:'category',data:recent.map(function(h){return h.date;}),axisLabel:{color:'#4a6685',fontSize:10,formatter:function(v){return v.substring(5);}},axisLine:{lineStyle:{color:'rgba(59,140,255,0.12)'}}},
+    xAxis:{type:'category',data:recent.map(function(h){return h.date;}),axisLabel:{color:'#4a6685',fontSize:9,rotate:40,hideOverlap:true,formatter:function(v){return v;}},axisLine:{lineStyle:{color:'rgba(59,140,255,0.12)'}}},
     yAxis:{type:'value',axisLabel:{color:'#4a6685',fontSize:10,formatter:'{value}%'},splitLine:{lineStyle:{color:'rgba(59,140,255,0.05)'}}},
     series:[{
       type:'line',data:cumReturns,
