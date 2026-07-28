@@ -1618,7 +1618,7 @@ function renderDrawdownChart(data){
   });
   
   chart.setOption({
-    grid:{left:'3%',right:'5%',bottom:'15%',top:'18%',containLabel:true},
+    grid:{left:'3%',right:'5%',bottom:'22%',top:'18%',containLabel:true},
     tooltip:{trigger:'axis',formatter:function(p){
       var html = p[0].name + '年<br/>';
       html += '最大回撤: ' + p[0].value.toFixed(2) + '%<br/>';
@@ -1627,7 +1627,7 @@ function renderDrawdownChart(data){
     }},
     legend:{data:['最大回撤','年化波动率'],top:0,left:'center',textStyle:{fontSize:10,color:'#4a6685'},itemWidth:12,itemHeight:10},
     dataZoom:[{type:'inside',start:0,end:100},{type:'slider',start:0,end:100,height:15,bottom:5}],
-    xAxis:{type:'category',data:years,axisLabel:{color:'#4a6685',fontSize:10},axisLine:{lineStyle:{color:'rgba(59,140,255,0.12)'}}},
+    xAxis:{type:'category',data:years,axisLabel:{color:'#4a6685',fontSize:9,interval:0,rotate:38,hideOverlap:false},axisLine:{lineStyle:{color:'rgba(59,140,255,0.12)'}}},
     yAxis:[
       {type:'value',name:'最大回撤(%)',axisLabel:{formatter:'{value}%',color:'#4a6685'},splitLine:{lineStyle:{color:'rgba(59,140,255,0.05)'}}},
       {type:'value',name:'年化波动率(%)',axisLabel:{formatter:'{value}%',color:'#f5a623'},splitLine:{show:false}}
