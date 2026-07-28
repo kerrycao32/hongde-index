@@ -1532,8 +1532,19 @@ function renderHistoryChart(data){
   // 转换为累计收益率（以区间首日为基准）
   var baseClose = recent[0].close;
   var cumReturns = recent.map(function(h){ return ((h.close - baseClose) / baseClose * 100); });
-  var chart = echarts.init(document.getElementById('historyChart'));
+  var   chart = echarts.init(document.getElementById('historyChart'));
   chartInstances.history = chart;
+  var historyDates = recent.map(function(h){return h.date;});
+  // 每3个月（季度首交易日）显示一个日期标签，避免密集重叠
+  var showQuarter = [];
+  var lastQ = '';
+  for(var hi=0; hi<historyDates.length; hi++){
+    var hp = historyDates[hi].split('-');
+    var hq = Math.floor((+hp[1]-1)/3);
+    var hqk = hp[0] + '-' + hq;
+    if(hqk !== lastQ){ showQuarter.push(true); lastQ = hqk; }
+    else { showQuarter.push(false); }
+  }
   chart.setOption({
     grid:{left:'3%',right:'4%',bottom:'22%',top:'10%',containLabel:true},
     tooltip:{trigger:'axis',formatter:function(p){
@@ -1541,7 +1552,7 @@ function renderHistoryChart(data){
       return p[0].name + '<br/>累计收益率：' + (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
     }},
     dataZoom:[{type:'inside',start:0,end:100},{type:'slider',start:0,end:100,height:20,bottom:5,handleSize:'100%',textStyle:{fontSize:9,color:'#4a6685'}}],
-    xAxis:{type:'category',data:recent.map(function(h){return h.date;}),axisLabel:{color:'#4a6685',fontSize:9,rotate:40,hideOverlap:true,formatter:function(v){return v;}},axisLine:{lineStyle:{color:'rgba(59,140,255,0.12)'}}},
+    xAxis:{type:'category',data:historyDates,axisLabel:{color:'#4a6685',fontSize:9,rotate:30,interval:function(idx){return showQuarter[idx];},hideOverlap:false,formatter:function(v){return v;}},axisLine:{lineStyle:{color:'rgba(59,140,255,0.12)'}}},
     yAxis:{type:'value',axisLabel:{color:'#4a6685',fontSize:10,formatter:'{value}%'},splitLine:{lineStyle:{color:'rgba(59,140,255,0.05)'}}},
     series:[{
       type:'line',data:cumReturns,
@@ -1638,7 +1649,7 @@ function renderDrawdownChart(data){
         data:ddValues,
         itemStyle:{color:'#3b8cff'},
         barWidth:'45%',
-        label:{show:true,position:'bottom',formatter:function(p){return p.value.toFixed(1) + '%';},fontSize:9,color:'#4a6685'}
+        label:{show:true,position:'bottom',formatter:function(p){return p.value.toFixed(2) + '%';},fontSize:9,color:'#4a6685'}
       },
       {
         name:'年化波动率',type:'line',yAxisIndex:1,
@@ -1646,7 +1657,7 @@ function renderDrawdownChart(data){
         smooth:true,symbol:'circle',symbolSize:6,
         lineStyle:{color:'#f5a623',width:2},
         itemStyle:{color:'#f5a623'},
-        label:{show:true,position:'top',formatter:function(p){return p.value == null ? '' : p.value.toFixed(1) + '%';},fontSize:9,color:'#f5a623',textShadow:'1px 1px 2px rgba(255,255,255,0.8)'}
+        label:{show:true,position:'top',formatter:function(p){return p.value == null ? '' : p.value.toFixed(2) + '%';},fontSize:9,color:'#f5a623',textShadow:'1px 1px 2px rgba(255,255,255,0.8)'}
       }
     ]
   });
